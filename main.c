@@ -32,6 +32,7 @@ int input_string = 0;
 void run( char *input ){
 	if(!auto_loaded){
 		auto_loaded = 1;
+		printf( "Loading automata: %s\n", input );
 		aut = initAuto( input );
 	} else {
 		if(input_string)
