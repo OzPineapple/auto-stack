@@ -20,8 +20,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <getopt.h>
-#include <stdarg.h>
 #include "State.h"
 #include "Auto.h"
 #include "util.h"
@@ -34,17 +32,18 @@ int input_string = 0;
 void run( char *input ){
 	if(!auto_loaded){
 		auto_loaded = 1;
-		aut = iniAuto( input );
+		aut = initAuto( input );
 	} else {
 		if(input_string)
-			evalAuto(input, aut);
+			puts( evalStr(input, aut, final_state)? "Aceptada" : "Rechazada" ) ;
 		else{
 			FILE *file = efopen( input, "r" );
 			char *read;
 			size_t size = 0;
-			while( getline( &read, &size, file ) != 0 )
-				evalAuto( strsep(read,"\n"), aut );
+			while( getline( &read, &size, file ) > -1 )
+				puts( evalStr( strsep(&read,"\n"), aut, final_state )? "Aceptada":"Rechazada" );
 		}
+		puts("\n");
 	}
 }
 
@@ -66,4 +65,5 @@ int main ( int argc, char *argv[] ){
 			input_string = 1;
 		else 
 			run(argv[i]); // Feed or create the automata
+	return 0;
 }
