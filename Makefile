@@ -3,14 +3,14 @@ C = tcc
 r: main
 	./main
 
-main: main.o Auto.o State.o
-	$C main.o Auto.o State.o
+main: main.o State.o util.o
+	$C $^ -o $@
 
-Auto.o: Auto.h Auto.c
-	$C -c Auto.c
+Stage.o: State.c State.h
+	$C -c $< -o $@
 
-State.o: State.h State.c
-	$C -c State.c
+util.o: util.c util.h
+	$C -c $< -o $@
 
-c:
+clear:
 	rm *.o main
