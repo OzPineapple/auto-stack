@@ -4,7 +4,7 @@
 
 #include "State.h"
 #include "util.h"
-
+/* Crear estado */
 State* initState( ){
 	State *s = ecalloc( sizeof( State  ), 1 );
 	s->end   = ecalloc( sizeof( State* ), 1 );
@@ -23,7 +23,7 @@ State* destroyState( State *s ){
 	free( s );
 	return NULL;
 }
-
+/* Añadir una transisción al esatado */
 void addTrans( State *start, char *read, char *pop, char *push, State *end){
 	start->trans++;
 
@@ -34,18 +34,18 @@ void addTrans( State *start, char *read, char *pop, char *push, State *end){
 	addWord( pop,  start->pop  );
 	addWord( push, start->push );
 }
-
+/* Evauar el caracter en el estado */
 State* evalState( State *s, char *read, char *stack ){
 	int index = findWord( read, s->read );
 	if(index == -1)
-		die("Rejected: State \"%s\" didn't find the read \"%s\" transition", s->name,read);
+		die("Rejected: State %s do not have the read \"%s\" transition", s->name,read);
 	char *pop = getPop( index, s );
 	if( !strcmp( stack + strlen(stack) - strlen(pop), pop ) ) {
 		strcrop( stack, 0, strlen(pop) );
 		strcat( stack, getPush( index, s ) );
 		return s->end[index];
 	}
-	die("Rejected: Stack don't have on top \"%s\", Stack=%s", pop, stack );
+	die("Rejected: Stack do not have on top \"%s\", stack: %s", pop, stack );
 	return NULL;
 }
 
